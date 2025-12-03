@@ -2,49 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Website For Cats</title>
+    <title>Daily Cat</title>
     <style>
-        /* Body and background */
         body {
             margin: 0;
             padding: 50px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(to bottom, #e0f7fa, #ffffff); /* soft winter blue to white */
+            background: linear-gradient(to bottom, #f0f8ff, #ffffff);
             color: #333333;
             text-align: center;
         }
 
-        /* Header */
         h1 {
             font-size: 50px;
-            color: #00796b; /* cozy teal-blue */
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        #cat-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 0 15px #b0bec5;
+            margin-bottom: 20px;
+        }
+
+        #cat-title {
+            font-size: 28px;
+            color: #ff6f61;
             margin-bottom: 10px;
         }
 
-        /* Logo / cat image placeholder */
-        #logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 30px;
-            background-color: #ffcc80; /* soft warm color */
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 15px #b0bec5;
-            background-image: url('https://cdn-icons-png.flaticon.com/512/616/616408.png'); /* cute cat icon */
-            background-size: cover;
-            background-position: center;
-        }
-
-        /* Paragraphs */
-        p {
+        #cat-subtitle {
             font-size: 20px;
-            margin-bottom: 20px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            margin-bottom: 30px;
         }
 
-        /* Button */
         button {
             padding: 15px 30px;
             font-size: 20px;
@@ -63,88 +57,87 @@
             box-shadow: 0 0 25px #ffcc80;
         }
 
-        /* Visit counter */
         #visits {
             margin-top: 30px;
             font-size: 18px;
             color: #555555;
         }
-
-        /* Snowflake hexagon shapes */
-        .snowflake {
-            width: 80px;
-            height: 80px;
-            background-color: #b3e5fc;
-            margin: 10px;
-            display: inline-block;
-            position: relative;
-            clip-path: polygon(
-                25% 0%, 75% 0%, 
-                100% 50%, 75% 100%, 
-                25% 100%, 0% 50%
-            );
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .snowflake:hover {
-            transform: rotate(15deg) scale(1.2);
-            box-shadow: 0 0 15px #81d4fa;
-        }
-
-        /* Container for snowflakes */
-        #snow-container {
-            margin-top: 40px;
-        }
-
-        /* Subheader */
-        h2 {
-            color: #00796b;
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Logo -->
-    <div id="logo"></div>
+    <h1>🐱 Daily Cat</h1>
 
-    <!-- Header -->
-    <h1>Welcome to My Website</h1>
+    <!-- Cat image and text -->
+    <img id="cat-image" src="" alt="Daily Cat">
+    <div id="cat-title"></div>
+    <div id="cat-subtitle"></div>
 
-    <!-- Intro text -->
-    <p>I will code more stuff.</p>
-
-    <!-- Button -->
-    <button onclick="alert('You clicked the cozy button!')">Click Me!</button>
-
-    <!-- More text / about cats -->
-    <h2>About Cats</h2>
-    <p>Cats are cool!</p>
-
-    <h2>Fun Winter Tip</h2>
-    <p>Buff frog!</p>
+    <button onclick="showRandomCat()">See Another Cat!</button>
 
     <!-- Visit counter -->
     <div id="visits"></div>
 
-    <!-- Snowflake hexagons -->
-    <div id="snow-container">
-        <div class="snowflake"></div>
-        <div class="snowflake"></div>
-        <div class="snowflake"></div>
-        <div class="snowflake"></div>
-        <div class="snowflake"></div>
-    </div>
-
-    <!-- Global visit counter using CountAPI -->
     <script>
-        fetch('https://api.countapi.xyz/hit/yourusername/cozycatsite')
+        // Array of daily cats
+        const cats = [
+            {
+                name: "Whiskers",
+                subtitle: "Loves sunny spots and naps all day.",
+                image: "https://cdn2.thecatapi.com/images/MTY3ODIyMQ.jpg"
+            },
+            {
+                name: "Mittens",
+                subtitle: "Playful and curious, enjoys chasing shadows.",
+                image: "https://cdn2.thecatapi.com/images/MTY3ODI1MQ.jpg"
+            },
+            {
+                name: "Luna",
+                subtitle: "Quiet and mysterious, loves cozy blankets.",
+                image: "https://cdn2.thecatapi.com/images/MTY3ODI2MQ.jpg"
+            },
+            {
+                name: "Simba",
+                subtitle: "Bold explorer, king of the living room.",
+                image: "https://cdn2.thecatapi.com/images/MTY3ODI4MQ.jpg"
+            },
+            {
+                name: "Cleo",
+                subtitle: "Elegant and graceful, enjoys warm cups of tea nearby.",
+                image: "https://cdn2.thecatapi.com/images/MTY3ODI5MQ.jpg"
+            }
+            // Add more cats here if you want
+        ];
+
+        // Function to show cat based on day
+        function showDailyCat() {
+            const today = new Date();
+            const index = today.getDate() % cats.length;
+            const cat = cats[index];
+            document.getElementById("cat-image").src = cat.image;
+            document.getElementById("cat-title").innerText = cat.name;
+            document.getElementById("cat-subtitle").innerText = cat.subtitle;
+        }
+
+        // Function to show random cat when button clicked
+        function showRandomCat() {
+            const index = Math.floor(Math.random() * cats.length);
+            const cat = cats[index];
+            document.getElementById("cat-image").src = cat.image;
+            document.getElementById("cat-title").innerText = cat.name;
+            document.getElementById("cat-subtitle").innerText = cat.subtitle;
+        }
+
+        // Global visit counter using CountAPI
+        fetch('https://api.countapi.xyz/hit/yourusername/dailycat')
         .then(res => res.json())
         .then(data => {
             document.getElementById('visits').innerText = 
             "This website has been visited " + data.value + " times!";
         });
+
+        // Show the daily cat on load
+        showDailyCat();
     </script>
 
 </body>
