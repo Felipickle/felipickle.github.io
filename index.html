@@ -23,44 +23,61 @@
         top: 0; left: 0; width: 100vw; height: 100vh;
         pointer-events: none; z-index: 0;
     }
-    .main-content {
-        flex: 1;
+    .main-flex-group {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        width: 100vw;
+        justify-content: center;
+    }
+    .clicker-side {
+        flex: 0 0 auto;
+        margin-right: 44px;
+        margin-top: 30px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        align-items: flex-end;
+    }
+    .main-content {
+        display: flex;
+        flex-direction: column;
         align-items: center;
         position: relative;
         z-index: 1;
-        width: 100vw;
-        margin-top: 35px;
+        margin-top: 32px;
+        min-width: 340px;
+        max-width: 100vw;
     }
     h1 {
         font-size: 2.8rem;
         letter-spacing: 4px;
-        margin-bottom: 26px; margin-top: 0;
+        margin-bottom: 17px;
+        margin-top: 0;
         text-shadow: 0 2px 0 #173379, 4px 4px 0 #1c407d, 0 0 10px #21316e;
+        text-align: left;
+        width: 100%;
     }
     .madeby {
-        margin-top: 20px; font-size: 1rem; color: #ffe245;
+        margin-top: 10px; font-size: 1rem; color: #ffe245;
         background: rgba(0,0,0,0.13); padding: 6px 20px; border-radius: 7px;
         text-shadow: 2px 2px 0 #173379; box-shadow: 0 1px 13px #17337944;
         border: 2px solid #ffe24512;
     }
     .about {
-        font-size: 0.93rem; margin-top: 14px; max-width: 420px;
+        font-size: 0.93rem; margin-top: 12px; max-width: 460px;
         background: rgba(0,22,130,0.13); color: #d2ebff;
         border-radius: 7px; border: 2px solid #17337933; padding: 10px 16px;
         text-shadow: 1px 1px 0 #17337933;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
     }
     .alias-box {
-        margin-top: 8px;
-        margin-bottom: 18px;
+        margin-top: 6px;
+        margin-bottom: 13px;
         background: #193d8a;
-        padding: 15px 22px;
+        padding: 13px 19px;
         border-radius: 4px;
         border: 3px solid #ffe245;
-        font-size: 1.15rem;
+        font-size: 1rem;
         letter-spacing: 2px;
         text-align: left;
         box-shadow: 0 2px 18px #17225999;
@@ -72,14 +89,14 @@
         color: #ffe245;
         border: 2px solid #ffe245;
         border-radius: 3px;
-        padding: 7px 15px;
+        padding: 6px 12px;
         outline: none;
-        margin-right: 8px;
+        margin-right: 7px;
         letter-spacing: 1px;
         margin-top: 2px;
         margin-bottom: 2px;
         box-shadow: 0 2px 0 #17337944;
-        width: 164px;
+        width: 124px;
     }
     #aliasSaveBtn {
         font-family: inherit;
@@ -88,7 +105,7 @@
         color: #fff;
         border: 2px solid #ffe245;
         border-radius: 3px;
-        padding: 7px 20px;
+        padding: 5px 14px;
         cursor: pointer;
         margin-top: 2px;
         margin-bottom: 2px;
@@ -104,38 +121,27 @@
         color: #ffe245;
         text-shadow: 2px 2px 0 #173379;
         font-family: inherit;
-        font-size: 0.96em;
+        font-size: 0.95em;
     }
-
     /* --- Retro Clicker Game Styles --- */
     .clicker-game {
         display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-start;
-        gap: 52px;
-        margin-top: 15px;
-        flex-wrap: wrap;
-        width: 100%;
-        z-index: 2;
-    }
-    .clicker-left {
-        display: flex;
         flex-direction: column;
         align-items: flex-end;
-        min-width: 255px;
-        max-width: 350px;
+        gap: 19px;
+        width: 210px;
+        z-index: 2;
     }
     .score-box {
-        font-size: 1.35rem;
+        font-size: 1.1rem;
         color: #fff;
         background: #193d8a;
         border: 3px solid #ffe245;
         border-radius: 4px 16px 4px 16px;
         box-shadow: 0 2px 18px #17225999;
-        margin-bottom: 14px;
-        padding: 14px 31px 9px 35px;
-        width: 245px;
+        margin-bottom: 8px;
+        padding: 9px 17px 10px 20px;
+        width: 165px;
         text-align: center;
         letter-spacing: 2px;
         text-shadow: 1px 1px #173379, 0 0 5px #ffe24522;
@@ -143,105 +149,79 @@
     .button-list {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        margin-left: 8px;
-        margin-top: 6px;
+        gap: 8px;
+        margin-left: 0px;
+        margin-top: 2px;
+        max-height: 85vh;
+        overflow-y: auto;
+        width: 210px;
     }
     .retro-btn {
         font-family: inherit;
-        font-size: 1.13rem;
+        font-size: 0.9rem;
         display: flex;
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         background: #ff2331;
         color: #ffe245;
-        border: 4px solid #ffe245;
+        border: 3px solid #ffe245;
         border-radius: 4px;
-        padding: 17px 15px 17px 25px;
-        width: 295px;
-        letter-spacing: 2px;
-        box-shadow: 0 4px 0 #173379, 0 0 9px #19090f66;
+        padding: 8px 10px 8px 15px;
+        width: 204px;
+        letter-spacing: 1.2px;
+        box-shadow: 0 2px 0 #173379, 0 0 7px #19090f44;
         cursor: pointer;
         transition: background 0.14s, box-shadow 0.16s;
         text-align: left;
         outline: none;
-        text-shadow: 1px 2px 0 #173379, 0 0 6px #ffe24555;
+        text-shadow: 1px 2px 0 #173379, 0 0 3px #ffe24555;
         position: relative;
-        border-right: 11px solid #dc1b24;
+        border-right: 8px solid #dc1b24;
+        min-height: 36px;
+        margin-bottom: 0px;
     }
     .retro-btn:active {
         background: #ca1420;
-        box-shadow: 0 2px 0 #173379, 0 0 2px #19090f99;
+        box-shadow: 0 1px 0 #173379, 0 0 2px #19090f99;
     }
     .btn-desc {
-        font-size: 1.02em;
+        font-size: 0.97em;
         color: #fff4a2;
         font-family: inherit;
         opacity: 0.92;
-        margin-left: 7px;
-        margin-right: 13px;
+        margin-left: 5px;
+        margin-right: 5px;
         flex: 1;
         text-shadow: none;
-        letter-spacing: 1.5px;
+        letter-spacing: 1px;
         font-weight: 400;
     }
     .btn-price {
-        font-size: 1.02em;
+        font-size: 0.96em;
         font-family: inherit;
         color: #aef0db;
         background: #142243ea;
         border-radius: 4px;
-        padding: 3px 10px;
-        margin-left: 9px;
+        padding: 1px 6px;
+        margin-left: 6px;
         text-shadow: none;
+        white-space: nowrap;
     }
     .btn-subs {
-        font-size: 0.92em;
+        font-size: 0.80em;
         color: #ffe245;
-        margin-left: 6px;
+        margin-left: 4px;
         text-shadow: none;
         background: none;
     }
-
     .stats {
-        font-size: 1rem;
+        font-size: 0.93rem;
         color: #ffe245;
-        margin: 18px 0 7px 0;
-        letter-spacing: 0.5px;
+        margin: 14px 0 4px 0;
+        letter-spacing: 0.3px;
         text-align: right;
         text-shadow: 1px 2px 0 #173379, 0 0 2px #17337933;
-    }
-    /* --- Leaderboard --- */
-    .leaderboard-box {
-        min-width: 260px;
-        max-width: 350px;
-        background: #173379b8;
-        border: 2px solid #ffe245a8;
-        border-radius: 0;
-        box-shadow: 0 2px 12px #17225999;
-        padding: 11px 25px 24px 25px;
-        text-align: center;
-        align-items: center;
-        margin-top: 9px;
-        margin-bottom: 18px;
-    }
-    .leaderboard-title {
-        color: #ffe245;
-        font-size: 1.25rem;
-        font-family: inherit;
-        margin-bottom: 9px;
-        letter-spacing: 1.5px;
-        text-shadow: 1px 2px 0 #173379, 0 0 5px #ffe24522;
-    }
-    #leaderboard-list {
-        font-size: 1.01rem;
-        font-family: inherit;
-        color: #f9dc8e;
-        text-align: left;
-        margin-left: 12px;
-        margin-top: 7px;
-        line-height: 1.8em;
     }
     .datetime {
         font-size: 0.9rem; color: #f2c234;
@@ -253,19 +233,26 @@
         z-index: 99;
     }
     @media (max-width: 900px) {
-        .clicker-game {
+        .main-flex-group {
             flex-direction: column;
             align-items: center;
-            margin-top: 18px;
-            gap: 27px;
         }
-        .clicker-left, .leaderboard-box {
-            margin-left: 0;
+        .clicker-side {
             margin-right: 0;
+            align-items: center;
+            width: 100vw;
+        }
+        .main-content {
+            margin-top: 0;
+        }
+        .clicker-game .button-list {
+            width: 97vw;
+            min-width: 160px;
+            max-width: 99vw;
         }
         .retro-btn {
             width: 97vw;
-            min-width: 245px;
+            min-width: 120px;
         }
     }
 </style>
@@ -277,46 +264,40 @@
         <rect x="80" y="0" width="20" height="5" fill="#143074" opacity="0.38"/>
         <rect x="0" y="95" width="20" height="5" fill="#143074" opacity="0.34"/>
     </svg>
-    <div class="main-content">
-        <h1>RETRO INDEX</h1>
-        <div class="madeby">made by yours truly</div>
-        <div class="about">
-            Welcome to the RETRO Clicker! A simple, fun retro browser game.<br>
-            Try to reach the top of the leaderboard!<br>
-            <span style="color:#ffe245; text-shadow:1px 1px #173379;">Who will be #1?</span>
-        </div>
-        <div class="alias-box">
-            <label for="aliasInput">Pick your alias:&nbsp;</label>
-            <input type="text" id="aliasInput" maxlength="16" placeholder="alias..." autocomplete="off">
-            <button id="aliasSaveBtn">Save</button>
-            <span class="current-alias" id="currentAlias"></span>
-        </div>
-        <div class="clicker-game">
-            <div class="clicker-left">
-                <div class="score-box" id="scoreBox">
-                    SUBSCRIBES: <span id="score">0</span>
-                </div>
-                <div class="button-list" id="buttonList">
-                    <!-- Buttons will be generated here -->
-                </div>
-                <div class="stats" id="stats">
-                    Upgrades make your clicks worth more.<br>
-                    <span id="upgradeStats"></span>
-                </div>
-            </div>
-            <div class="leaderboard-box">
-                <div class="leaderboard-title">Public Leaderboard</div>
-                <div id="leaderboard-list">
-                    <!-- Leaderboard entries go here -->
-                </div>
-                <div class="stats" id="leaderboard-stats"></div>
-            </div>
-        </div>
+    <div class="main-flex-group">
+      <div class="clicker-side">
+          <div class="clicker-game">
+              <div class="score-box" id="scoreBox">
+                  SUBSCRIBES: <span id="score">0</span>
+              </div>
+              <div class="button-list" id="buttonList">
+                  <!-- Buttons will be generated here -->
+              </div>
+              <div class="stats" id="stats">
+                  Upgrades make your clicks worth more.<br>
+                  <span id="upgradeStats"></span>
+              </div>
+          </div>
+      </div>
+      <div class="main-content">
+          <h1>RETRO INDEX</h1>
+          <div class="madeby">made by yours truly</div>
+          <div class="about">
+              Welcome to the RETRO Clicker! A simple, fun retro browser game.<br>
+              Try to level up by buying upgrades!<br>
+              <span style="color:#ffe245; text-shadow:1px 1px #173379;">How powerful can your clicks get?</span>
+          </div>
+          <div class="alias-box">
+              <label for="aliasInput">Pick your alias:&nbsp;</label>
+              <input type="text" id="aliasInput" maxlength="16" placeholder="alias..." autocomplete="off">
+              <button id="aliasSaveBtn">Save</button>
+              <span class="current-alias" id="currentAlias"></span>
+          </div>
+      </div>
     </div>
     <div class="datetime" id="datetime"></div>
 <script>
 /* --- RETRO CLICKER LOGIC --- */
-// Aliases (choose & store)
 const aliasInput = document.getElementById("aliasInput");
 const aliasSaveBtn = document.getElementById("aliasSaveBtn");
 const currentAliasSpan = document.getElementById("currentAlias");
@@ -331,11 +312,6 @@ function getRandomAlias() {
     let idx = Math.floor(Math.random() * names.length);
     return names[idx] + "#" + suffix;
 }
-function removePreviousAliasLB(oldAlias) {
-    let leaderboard = JSON.parse(localStorage.getItem("retro_leaderboard") || "[]");
-    leaderboard = leaderboard.filter(e => e.alias !== oldAlias);
-    localStorage.setItem("retro_leaderboard", JSON.stringify(leaderboard));
-}
 
 let myAlias = localStorage.getItem("clicker_alias") || getRandomAlias();
 currentAliasSpan.textContent = "Current: " + myAlias;
@@ -343,39 +319,25 @@ aliasInput.value = myAlias;
 aliasSaveBtn.onclick = function() {
     let val = aliasInput.value.trim().replace(/[^a-zA-Z0-9_\-#]/g,"");
     if (val.length >= 2) {
-        let oldAlias = myAlias;
         myAlias = val;
         localStorage.setItem("clicker_alias", myAlias);
         currentAliasSpan.textContent = "Current: " + myAlias;
-        removePreviousAliasLB(oldAlias);
-        saveScoreToLeaderboard();
     } else {
         alert("Alias must be at least 2 characters.");
     }
 };
 
-// --- Clicker State ---
 let clickScore = Number(localStorage.getItem("clicker_score") || 0);
 let clickPower = Number(localStorage.getItem("clicker_power") || 1);
 let upgrades = JSON.parse(localStorage.getItem("clicker_upgrades") || "{}");
 
-// --- Upgrade Config ---
+// --- MEGA LIST OF UPGRADES! ---
 const upgradesConfig = [
-    {
-        id: "mainClick",
-        label: "Subscribe!",
-        desc: "Gain +1 subscribe per click.",
-        price: 0,
-        subs: "+1/click",
-        action: function() {
-            clickScore += clickPower;
-            localStorage.setItem("clicker_score", clickScore);
-            updateScoreDisplay();
-            saveScoreToLeaderboard();
-        },
-        isMain: true
+    { id: "mainClick", label: "Subscribe!", desc: "+1 subscribe per click.", price: 0, subs: "+1/click", isMain: true,
+      action: function() { clickScore += clickPower; localStorage.setItem("clicker_score", clickScore); updateScoreDisplay(); }
     },
-    // Core upgrades
+
+    // Standard Progression
     { id: "double", label: "Double", desc: "Double click power.", price: 20, subs: "x2 power",
       action: function() { if (!upgrades.double && clickScore >= 20) { clickScore -= 20; clickPower *= 2; upgrades.double = true; storeUp(); }},
       unlocked: () => !upgrades.double
@@ -396,12 +358,11 @@ const upgradesConfig = [
       action: function() { if (!upgrades.endless && clickScore >= 50000) { clickScore -= 50000; clickPower = 1e9; upgrades.endless = true; storeUp(); }},
       unlocked: () => upgrades.ultra && !upgrades.endless
     },
-    // More loot upgrades!
     { id: "lucky", label: "Lucky Day", desc: "Critical click chance!", price: 750, subs: "2x sometimes",
       action: function() { if (!upgrades.lucky && clickScore >= 750) { clickScore -= 750; upgrades.lucky = true; storeUp(); }},
       unlocked: () => upgrades.storm && !upgrades.lucky
     },
-    { id: "multiplier", label: "Multiplier", desc: "x10 all future upgrades!", price: 9000, subs: "x10 future buffs",
+    { id: "multiplier", label: "Multiplier", desc: "x10 all upgrades!", price: 9000, subs: "x10 buffs",
       action: function() { if (!upgrades.multiplier && clickScore >= 9000) { clickScore -= 9000; upgrades.multiplier = true; clickPower *= 10; storeUp(); }},
       unlocked: () => upgrades.ultra && !upgrades.multiplier
     },
@@ -424,18 +385,77 @@ const upgradesConfig = [
       action: function() { if (!upgrades.hyper && clickScore >= 1000000) { clickScore -= 1000000; clickPower += 1000000; upgrades.hyper = true; storeUp(); }},
       unlocked: () => upgrades.prestige && !upgrades.hyper
     },
-    { id: "legend", label: "Legendary", desc: "Become a leaderboard legend!", price: 10000000, subs: "You are legend.",
+    { id: "legend", label: "Legendary", desc: "Ascend to legend.", price: 10000000, subs: "You are legend.",
       action: function() { if (!upgrades.legend && clickScore >= 10000000) { clickScore -= 10000000; clickPower = 1e12; upgrades.legend = true; storeUp(); }},
       unlocked: () => upgrades.hyper && !upgrades.legend
     },
+
+    // New/More Upgrades!
+    { id: "auto", label: "Auto Clicker", desc: "Auto click every second.", price: 25000, subs: "+auto click",
+      action: function() { if (!upgrades.auto && clickScore >= 25000) { clickScore -= 25000; upgrades.auto = true; storeUp(); }},
+      unlocked: () => upgrades.endless && !upgrades.auto
+    },
+    { id: "rainbow", label: "Rainbow Clicks", desc: "Rainbow click effects!", price: 90000, subs: "rainbow style",
+      action: function() { if (!upgrades.rainbow && clickScore >= 90000) { clickScore -= 90000; upgrades.rainbow = true; storeUp(); }},
+      unlocked: () => upgrades.auto && !upgrades.rainbow
+    },
+    { id: "galaxy", label: "Galaxy Boost", desc: "+25,000,000 power!", price: 50000000, subs: "+25M power",
+      action: function() { if (!upgrades.galaxy && clickScore >= 50000000) { clickScore -= 50000000; clickPower += 25000000; upgrades.galaxy = true; storeUp(); }},
+      unlocked: () => upgrades.rainbow && !upgrades.galaxy
+    },
+    { id: "atom", label: "Atomic Clicks", desc: "x50 click power!", price: 900000000, subs: "x50 power",
+      action: function() { if (!upgrades.atom && clickScore >= 900000000) { clickScore -= 900000000; clickPower *= 50; upgrades.atom = true; storeUp(); }},
+      unlocked: () => upgrades.galaxy && !upgrades.atom
+    },
+    { id: "blackhole", label: "Blackhole", desc: "INFINITE cosmic power.", price: 5000000000, subs: "∞ cosmic",
+      action: function() { if (!upgrades.blackhole && clickScore >= 5000000000) { clickScore -= 5000000000; clickPower = 1e20; upgrades.blackhole = true; storeUp(); }},
+      unlocked: () => upgrades.atom && !upgrades.blackhole
+    },
+    // Crazy upgrades!
+    { id: "matrix", label: "Matrix Glitch", desc: "Unleash code rain. Click power x2,048.", price: 25000000000, subs: "x2048",
+      action: function() { if (!upgrades.matrix && clickScore >= 25000000000) { clickScore -= 25000000000; clickPower *= 2048; upgrades.matrix = true; storeUp(); }},
+      unlocked: () => upgrades.blackhole && !upgrades.matrix
+    },
+    { id: "pizza", label: "Pizza Power", desc: "Every click gives you pizza. +1,000,000 power", price: 123456789, subs: "+1M & pizza",
+      action: function() { if (!upgrades.pizza && clickScore >= 123456789) { clickScore -= 123456789; clickPower += 1000000; upgrades.pizza = true; storeUp(); }},
+      unlocked: () => upgrades.blackhole && !upgrades.pizza
+    },
+    { id: "retroGod", label: "RETRO GODMODE", desc: "Max click power, for real.", price: 1000000000000, subs: "MAX POWER",
+      action: function() { if (!upgrades.retroGod && clickScore >= 1000000000000) { clickScore -= 1000000000000; clickPower = Number.MAX_SAFE_INTEGER; upgrades.retroGod = true; storeUp(); }},
+      unlocked: () => upgrades.matrix && upgrades.pizza && !upgrades.retroGod
+    },
+    { id: "egg", label: "???", desc: "Secret upgrade!", price: 12345678901, subs: "???",
+      action: function() { if (!upgrades.egg && clickScore >= 12345678901) { clickScore -= 12345678901; clickPower += 7; upgrades.egg = true; storeUp(); }},
+      unlocked: () => upgrades.retroGod && !upgrades.egg
+    },
+    { id: "reset", label: "RESET UNIVERSE", desc: "Return all but don't reset upgrades. 2x power FOREVER.", price: 50000000000000, subs: "crescendo",
+      action: function() {
+        if (!upgrades.reset && clickScore >= 50000000000000) {
+            clickScore = 0;
+            clickPower = Math.round(clickPower * 2);
+            upgrades.reset = true;
+            storeUp();
+        }
+      },
+      unlocked: () => upgrades.egg && !upgrades.reset
+    },
+    { id: "patreon", label: "Face Reveal", desc: "Are you ready?... +5,000", price: 5000, subs: "true face",
+      action: function() { if (!upgrades.patreon && clickScore >= 5000) { clickScore -= 5000; clickPower += 5000; upgrades.patreon = true; storeUp(); }},
+      unlocked: () => upgrades.storm && !upgrades.patreon
+    },
+    { id: "gamergf", label: "Gamer GF", desc: "She doubles your power.", price: 1e7, subs: "x2 power",
+      action: function() { if (!upgrades.gamergf && clickScore >= 1e7) { clickScore -= 1e7; clickPower *= 2; upgrades.gamergf = true; storeUp(); }},
+      unlocked: () => upgrades.legend && !upgrades.gamergf
+    }
 ];
+
 function storeUp() {
     localStorage.setItem("clicker_score", clickScore);
     localStorage.setItem("clicker_power", clickPower);
     localStorage.setItem("clicker_upgrades", JSON.stringify(upgrades));
     updateScoreDisplay();
-    saveScoreToLeaderboard();
 }
+
 // Loot effect for Lucky upgrade!
 function criticalClick() {
     if (upgrades.lucky) {
@@ -446,20 +466,32 @@ function criticalClick() {
         }
     }
 }
-function flashEffect(txt) {
+// Rainbow click effect for Rainbow upgrade!
+function rainbowFlash(txt) {
+    let colors = ['#ffe245', '#ff2331', '#44f9fe', '#fe44f9', '#32fd60', '#fdce32'];
+    let chosen = colors[Math.floor(Math.random()*colors.length)];
     let box = document.getElementById("scoreBox");
     let old = box.innerHTML;
-    box.innerHTML += `<br><span style="color:#ffe245;background:#ff2331;padding:2px 19px;border-radius:5px;box-shadow:0 0 10px #ffe24544;letter-spacing:2px;font-size:1.01em;">${txt}</span>`;
-    setTimeout(function(){box.innerHTML = old;}, 850);
+    box.innerHTML += `<br><span style="color:${chosen};background:#1b1b77;padding:2px 19px;border-radius:5px;box-shadow:0 0 10px ${chosen}44;letter-spacing:2px;font-size:1.01em;">${txt}</span>`;
+    setTimeout(function(){box.innerHTML = old;}, 750);
 }
-
-// Render clicker buttons:
+function flashEffect(txt) {
+    if(upgrades.rainbow){
+        rainbowFlash(txt);
+    }else{
+        let box = document.getElementById("scoreBox");
+        let old = box.innerHTML;
+        box.innerHTML += `<br><span style="color:#ffe245;background:#ff2331;padding:2px 19px;border-radius:5px;box-shadow:0 0 10px #ffe24544;letter-spacing:2px;font-size:1.01em;">${txt}</span>`;
+        setTimeout(function(){box.innerHTML = old;}, 750);
+    }
+}
+// Render clicker buttons (tons of upgrades!)
 function renderButtons() {
     const buttonList = document.getElementById("buttonList");
     buttonList.innerHTML = "";
     upgradesConfig.forEach((up,i) => {
-        // Visible logic
-        if (up.isMain || up.unlocked && up.unlocked()) {
+        // Visibility logic
+        if (up.isMain || (up.unlocked && up.unlocked())) {
             const btn = document.createElement("button");
             btn.className = "retro-btn" + (up.isMain ? "" : " upgrade-btn");
             if(!up.isMain) {
@@ -467,7 +499,6 @@ function renderButtons() {
             }
             btn.onclick = function() {
                 up.action();
-                // Add critical effect on main click
                 if (up.id === "mainClick") criticalClick();
             };
             btn.innerHTML =
@@ -480,7 +511,18 @@ function renderButtons() {
     });
 }
 renderButtons();
-
+// Auto click logic for Auto Clicker
+let autoClickInterval = null;
+function handleAutoClicker() {
+    if (upgrades.auto && !autoClickInterval) {
+        autoClickInterval = setInterval(()=>{
+            upgradesConfig[0].action();
+        }, 1000);
+    } else if (!upgrades.auto && autoClickInterval) {
+        clearInterval(autoClickInterval);
+        autoClickInterval = null;
+    }
+}
 // Keep score & upgrades in sync
 function updateScoreDisplay() {
     document.getElementById("score").textContent = clickScore;
@@ -497,15 +539,14 @@ function updateScoreDisplay() {
         "Upgrades make your clicks worth more.<br>" +
         "Current click power: <span style='color:#ffe245'>" + clickPower + "</span>";
     renderButtons();
+    handleAutoClicker();
 }
 updateScoreDisplay();
-
-// --- VISIT COUNTS (Shared for everyone = fake demo) ---
+// --- VISIT COUNTS Demo ---
 function getToday() {
     return new Date().toISOString().split("T")[0];
 }
 let today = getToday();
-// Simulated global/public counters (for actual site-wide stats, use server/database)
 let lastDay = localStorage.getItem("last_day") || "";
 let allTime = Number(localStorage.getItem("visits_alltime") || 0);
 let daily = Number(localStorage.getItem("visits_daily") || 0);
@@ -517,37 +558,6 @@ allTime++;
 daily++;
 localStorage.setItem("visits_alltime", allTime);
 localStorage.setItem("visits_daily", daily);
-
-// --- Fake Leaderboard using localStorage ---
-// For real public leaderboard, use Firebase/Supabase/etc.
-function saveScoreToLeaderboard() {
-    let leaderboard = JSON.parse(localStorage.getItem("retro_leaderboard") || "[]");
-    // Remove any old entry for this alias
-    leaderboard = leaderboard.filter(e => e.alias !== myAlias);
-    leaderboard.push({alias: myAlias, score: clickScore});
-    leaderboard.sort((a,b) => b.score-a.score);
-    leaderboard = leaderboard.slice(0,15); // Top 15
-    localStorage.setItem("retro_leaderboard", JSON.stringify(leaderboard));
-    renderLeaderboard();
-}
-function renderLeaderboard() {
-    let leaderboard = JSON.parse(localStorage.getItem("retro_leaderboard") || "[]");
-    let html = "";
-    leaderboard.sort((a,b) => b.score-a.score);
-    leaderboard.forEach((e,i) => {
-        html += `<div>${i+1}. <span style="color:#ffe245">${e.alias}</span> — <b>${e.score}</b></div>`;
-    });
-    document.getElementById("leaderboard-list").innerHTML = html || "<span style='color:#fff;'>No scores yet!</span>";
-    let myRank = leaderboard.findIndex(e => e.alias === myAlias);
-    if (myRank !== -1) {
-        document.getElementById("leaderboard-stats").innerHTML =
-            `Your alias: <b>${myAlias}</b> &nbsp;|&nbsp; Rank: <span style="color:#ffe245">${myRank+1}/${leaderboard.length}</span>`;
-    } else {
-        document.getElementById("leaderboard-stats").innerHTML = "";
-    }
-}
-saveScoreToLeaderboard();
-
 // --- DATETIME ---
 function pad(n){ return n<10 ? '0'+n : n; }
 function updateDateTime() {
