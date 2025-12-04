@@ -1,197 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Cozy Digital Pet</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 50px;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(to bottom, #fff8e1, #ffe0b2);
-            color: #333;
-            text-align: center;
-        }
+<meta charset="UTF-8">
+<title>My Website</title>
 
-        h1 {
-            font-size: 50px;
-            color: #ff7043;
-            margin-bottom: 20px;
-        }
+<!-- Retro Pixel Font -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-        #pet-image {
-            width: 250px;
-            height: 250px;
-            border-radius: 20px;
-            object-fit: cover;
-            box-shadow: 0 0 15px #b0bec5;
-            margin-bottom: 20px;
-        }
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        font-family: 'Press Start 2P', cursive;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-        #username-display {
-            font-size: 22px;
-            margin-bottom: 20px;
-        }
+        /* Retro 80s gradient background */
+        background: linear-gradient(135deg, #ff0080, #ff8c00, #ffe600, #00eaff, #4b00ff);
+        background-size: 600% 600%;
+        animation: bgMove 12s ease infinite;
+    }
 
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            margin: 10px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            background-color: #ffcc80;
-            box-shadow: 0 0 15px #b0bec5;
-            transition: all 0.3s ease;
-        }
+    @keyframes bgMove {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
 
-        button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px #ffcc80;
-        }
-
-        #stats {
-            margin-top: 30px;
-            font-size: 20px;
-        }
-
-        input {
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-        }
-
-    </style>
+    h1 {
+        color: white;
+        font-size: 40px;
+        text-shadow: 3px 3px 0px black;
+    }
+</style>
 </head>
 <body>
-
-    <h1>Cozy Digital Pet</h1>
-
-    <!-- Username setup -->
-    <div id="username-section">
-        <input type="text" id="username-input" placeholder="Enter your username">
-        <button onclick="setUsername()">Start</button>
-    </div>
-
-    <div id="username-display"></div>
-
-    <!-- Pet selection -->
-    <div id="pet-selection" style="display:none;">
-        <p>Choose your pet:</p>
-        <button onclick="choosePet('cat')">Cat 🐱</button>
-        <button onclick="choosePet('dog')">Dog 🐶</button>
-        <button onclick="choosePet('bunny')">Bunny 🐰</button>
-    </div>
-
-    <!-- Pet display -->
-    <div id="pet-area" style="display:none;">
-        <img id="pet-image" src="" alt="Your Pet">
-        <div id="stats">
-            Hunger: <span id="hunger">0</span><br>
-            Happiness: <span id="happiness">0</span>
-        </div>
-        <button onclick="feedPet()">Feed</button>
-        <button onclick="playWithPet()">Play</button>
-    </div>
-
-    <script>
-        // Load username if exists
-        if(localStorage.getItem('username')) {
-            document.getElementById('username-input').value = localStorage.getItem('username');
-            startGame();
-        }
-
-        let pet = null;
-        let hunger = 50;
-        let happiness = 50;
-
-        function setUsername() {
-            const username = document.getElementById('username-input').value.trim();
-            if(username === '') {
-                alert('Please enter a username!');
-                return;
-            }
-            localStorage.setItem('username', username);
-            startGame();
-        }
-
-        function startGame() {
-            document.getElementById('username-section').style.display = 'none';
-            document.getElementById('username-display').innerText = 'Welcome, ' + localStorage.getItem('username') + '!';
-            document.getElementById('pet-selection').style.display = 'block';
-
-            // Load pet if exists
-            const savedPet = JSON.parse(localStorage.getItem('petData'));
-            if(savedPet) {
-                pet = savedPet.type;
-                hunger = savedPet.hunger;
-                happiness = savedPet.happiness;
-                showPet();
-            }
-        }
-
-        function choosePet(type) {
-            pet = type;
-            hunger = 50;
-            happiness = 50;
-            savePet();
-            showPet();
-        }
-
-        function showPet() {
-            document.getElementById('pet-selection').style.display = 'none';
-            document.getElementById('pet-area').style.display = 'block';
-
-            const images = {
-                cat: 'https://cdn2.thecatapi.com/images/MTY3ODIyMQ.jpg',
-                dog: 'https://images.dog.ceo/breeds/beagle/n02088364_11136.jpg',
-                bunny: 'https://upload.wikimedia.org/wikipedia/commons/3/33/White_rabbit_facing_right.jpg'
-            };
-
-            document.getElementById('pet-image').src = images[pet];
-            updateStats();
-        }
-
-        function feedPet() {
-            hunger = Math.max(0, hunger - 10);
-            happiness = Math.min(100, happiness + 5);
-            updateStats();
-            savePet();
-        }
-
-        function playWithPet() {
-            happiness = Math.min(100, happiness + 10);
-            hunger = Math.min(100, hunger + 5);
-            updateStats();
-            savePet();
-        }
-
-        function updateStats() {
-            document.getElementById('hunger').innerText = hunger;
-            document.getElementById('happiness').innerText = happiness;
-        }
-
-        function savePet() {
-            localStorage.setItem('petData', JSON.stringify({
-                type: pet,
-                hunger: hunger,
-                happiness: happiness
-            }));
-        }
-
-        // Stats decrease over time
-        setInterval(() => {
-            if(pet) {
-                hunger = Math.min(100, hunger + 1);
-                happiness = Math.max(0, happiness - 1);
-                updateStats();
-                savePet();
-            }
-        }, 60000); // every 1 minute
-
-    </script>
-
+    <h1>MY WEBSITE</h1>
 </body>
 </html>
