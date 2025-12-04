@@ -2,160 +2,210 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>RETROPAGE</title>
+<title>RETRO INDEX</title>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
     body {
         margin: 0;
         padding: 0;
         height: 100vh;
-        box-sizing: border-box;
         font-family: 'Press Start 2P', monospace;
         background: #2762e9;
         color: #fff;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        flex-direction: row;
+        align-items: stretch;
         position: relative;
         overflow: hidden;
     }
     .bg-art {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        pointer-events: none;
-        z-index: 0;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        pointer-events: none; z-index: 0;
     }
-
+    .left-panel {
+        width: 340px;
+        min-width: 200px;
+        max-width: 380px;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 50px 0 0 34px;
+        z-index: 2;
+        position: relative;
+    }
+    .blog-header {
+        font-size: 1.1rem;
+        color: #ffe245;
+        font-family: inherit;
+        margin-bottom: 16px;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 0 #142243, 0 0 12px #17337966;
+    }
+    .blog-content {
+        font-size: 1.05rem;
+        color: #d2ebff;
+        font-family: inherit;
+        white-space: pre-line;
+        margin-bottom: 24px;
+        max-width: 330px;
+        text-shadow: 0 2px 0 #17337966;
+    }
+    .subscribe-section {
+        font-family: inherit;
+        margin-top: 10px;
+    }
+    #subscribe-btn {
+        font-family: inherit;
+        font-size: 1rem;
+        background: #ffe245;
+        color: #142243;
+        border: 2px solid #ffe245;
+        border-radius: 7px;
+        padding: 7px 18px;
+        cursor: pointer;
+        letter-spacing: 1px;
+        margin-right: 10px;
+        margin-bottom: 7px;
+        margin-top: 6px;
+        box-shadow: 1px 2px 0 #17337944;
+        transition: background 0.2s;
+    }
+    #subscribe-btn:hover {
+        background: #ffe245cc;
+    }
+    #subcount, #visitcounts {
+        font-size: 1rem;
+        color: #fff;
+        text-shadow: 0 2px 0 #173379, 0 0 8px #17337944;
+        margin-bottom: 6px;
+        margin-top: 5px;
+        font-family: inherit;
+    }
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
     h1 {
         font-size: 2.8rem;
         letter-spacing: 4px;
-        margin-bottom: 26px;
-        margin-top: 0;
-        font-family: inherit;
-        color: #fff;
-        text-shadow:
-            0 2px 0 #173379,
-            4px 4px 0 #1c407d,
-            0 0 10px #21316e;
-        z-index: 1;
+        margin-bottom: 26px; margin-top: 0;
+        text-shadow: 0 2px 0 #173379, 4px 4px 0 #1c407d, 0 0 10px #21316e;
     }
-
-    p {
-        font-size: 1.4rem;
-        font-family: inherit;
-        letter-spacing: 2px;
-        margin: 15px 0;
-        color: #f6f6f6;
-        text-shadow:
-            0 2px 0 #173379,
-            0 0 8px #1c407d;
-        z-index: 1;
-    }
-
     .madeby {
-        margin-top: 35px;
-        font-size: 1rem;
-        color: #ffe245;
-        font-family: inherit;
-        letter-spacing: 1px;
-        background: rgba(0,0,0,0.13);
-        padding: 6px 20px;
-        border-radius: 7px;
-        text-shadow: 2px 2px 0 #173379;
-        box-shadow: 0 1px 13px #17337944;
+        margin-top: 35px; font-size: 1rem; color: #ffe245;
+        background: rgba(0,0,0,0.13); padding: 6px 20px; border-radius: 7px;
+        text-shadow: 2px 2px 0 #173379; box-shadow: 0 1px 13px #17337944;
         border: 2px solid #ffe24512;
-        z-index: 1;
     }
-
     .about {
-        font-size: 0.93rem;
-        margin-top: 14px;
-        max-width: 480px;
-        background: rgba(0,22,130,0.13);
-        color: #d2ebff;
-        border-radius: 7px;
-        border: 2px solid #17337933;
-        padding: 10px 16px;
+        font-size: 0.93rem; margin-top: 14px; max-width: 480px;
+        background: rgba(0,22,130,0.13); color: #d2ebff;
+        border-radius: 7px; border: 2px solid #17337933; padding: 10px 16px;
         text-shadow: 1px 1px 0 #17337933;
-        font-family: inherit;
-        z-index: 1;
     }
-
     .datetime {
-        font-size: 0.9rem;
-        color: #f2c234;
-        font-family: inherit;
-        position: fixed;
-        right: 24px;
-        bottom: 14px;
-        text-shadow: 2px 2px 0 #173379, 0 0 6px #1c407d;
-        background: rgba(20,40,130,0.13);
-        padding: 6px 14px;
-        border-radius: 7px;
+        font-size: 0.9rem; color: #f2c234;
+        position: fixed; right: 24px; bottom: 14px;
+        background: rgba(20,40,130,0.13); padding: 6px 14px; border-radius: 7px;
         border: 2px solid #ffe24512;
-        z-index: 2;
-        letter-spacing: 1.5px;
-        user-select: none;
-        pointer-events: none;
+        text-shadow: 2px 2px 0 #173379, 0 0 6px #1c407d;
+        letter-spacing: 1.5px; user-select: none; pointer-events: none;
+        z-index: 99;
     }
 </style>
 </head>
 <body>
     <svg class="bg-art" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <polygon points="100,100 70,100 100,70"
-            fill="#143074" opacity="0.45"/>
-        <polygon points="0,0 30,0 0,30"
-            fill="#143074" opacity="0.43"/>
-        <rect x="80" y="0" width="20" height="5"
-            fill="#143074" opacity="0.38"/>
-        <rect x="0" y="95" width="20" height="5"
-            fill="#143074" opacity="0.34"/>
+        <polygon points="100,100 70,100 100,70" fill="#143074" opacity="0.45"/>
+        <polygon points="0,0 30,0 0,30" fill="#143074" opacity="0.43"/>
+        <rect x="80" y="0" width="20" height="5" fill="#143074" opacity="0.38"/>
+        <rect x="0" y="95" width="20" height="5" fill="#143074" opacity="0.34"/>
     </svg>
-    <h1>RETRO INDEX</h1>
-    <p id="daily"></p>
-    <p id="alltime"></p>
-    <div class="madeby">made by felipickle</div>
-    <div class="about">
-        This is my website.<br>
-        It is very cool,<br>
-       give the link to someone near u.
+    <div class="left-panel">
+        <div class="blog-header">RETRO BLOG</div>
+        <div class="blog-content" id="blogContent">
+Today's log (Dec 4, 2025):
+Worked on the site's retro style today and added this blog entry spot!
+Now I can easily jot down thoughts or daily updates here forever.
+
+Cool ideas for the future:
+- Custom pixel art?
+- Project of the week?
+- Retro high scores...?
+
+Stay tuned!
+        </div>
+        <div class="subscribe-section">
+            <button id="subscribe-btn">Subscribe</button>
+            <span id="subcount">Subscribers: ...</span>
+        </div>
+        <div id="visitcounts">
+            Daily Visits: ... <br>
+            All-Time Visits: ...
+        </div>
+    </div>
+    <div class="main-content">
+        <h1>RETRO INDEX</h1>
+        <div class="madeby">made by yours truly</div>
+        <div class="about">
+            This is a super simple retro web page with a classic "8-bit" look.<br>
+            It tracks your daily and total visits,<br>
+            features a throwback visual style, and is lovingly crafted for fun & nostalgia.
+        </div>
     </div>
     <div class="datetime" id="datetime"></div>
 <script>
+// --- VISIT COUNTS (Shared for everyone) ---
+// Note: This uses localStorage for demonstration, but for real shared counts you must use a backend (Firebase, Supabase, etc.).
 function getToday() {
     return new Date().toISOString().split("T")[0];
 }
-
-// Load or initialize localStorage values
-let allTime = Number(localStorage.getItem("visits_alltime") || 0);
-let daily = Number(localStorage.getItem("visits_daily") || 0);
-let lastDay = localStorage.getItem("last_day");
+// Simulated global/public counters with localStorage.
+// Replace all below with a backend for real site-wide stats.
 let today = getToday();
 
-// Reset daily if new day
-if (lastDay !== today) {
-    daily = 0;
-    localStorage.setItem("last_day", today);
+function updateVisitCounts() {
+    // Simulated global tracking (for actual site-wide stats you need server/database)
+    let lastDay = localStorage.getItem("last_day") || "";
+    let allTime = Number(localStorage.getItem("visits_alltime") || 0);
+    let daily = Number(localStorage.getItem("visits_daily") || 0);
+
+    if (lastDay !== today) {
+        daily = 0;
+        localStorage.setItem("last_day", today);
+    }
+    allTime++;
+    daily++;
+    localStorage.setItem("visits_alltime", allTime);
+    localStorage.setItem("visits_daily", daily);
+
+    document.getElementById("visitcounts").innerHTML =
+        `Daily Visits: ${daily}<br>All-Time Visits: ${allTime}`;
+}
+updateVisitCounts();
+// --- SUBSCRIBE BUTTON (Shared for everyone) ---
+// Note: For global subscribe across devices, you need a backend. This demo uses localStorage for local-only count.
+function updateSubCount() {
+    let subs = Number(localStorage.getItem("subscribers") || 0);
+    document.getElementById("subcount").textContent = "Subscribers: " + subs;
+}
+updateSubCount();
+
+document.getElementById("subscribe-btn").onclick = function() {
+    let subs = Number(localStorage.getItem("subscribers") || 0);
+    subs++;
+    localStorage.setItem("subscribers", subs);
+    updateSubCount();
 }
 
-// Increase counts
-allTime++;
-daily++;
-
-// Save updated totals
-localStorage.setItem("visits_alltime", allTime);
-localStorage.setItem("visits_daily", daily);
-
-// Display on screen
-document.getElementById("daily").textContent = "Daily Visits: " + daily;
-document.getElementById("alltime").textContent = "All-Time Visits: " + allTime;
-
-// Date and time (bottom right)
+// --- DATETIME ---
 function pad(n){ return n<10 ? '0'+n : n; }
 function updateDateTime() {
     const now = new Date();
