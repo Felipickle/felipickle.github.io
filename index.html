@@ -36,6 +36,16 @@
 
       <section class="center">
         <div class="panel">
+          <h3>Credit Clicker</h3>
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="font-family:'Press Start 2P',monospace;color:var(--accent);">Per Click: <span id="creditsPerClick">1</span></div>
+            <button id="creditBtn" style="padding:10px 16px;border-radius:8px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#021018;font-weight:700;cursor:pointer">MINE CREDITS</button>
+            <button id="buyClickUpgrade" style="padding:8px 12px;border-radius:8px;border:0;background:#123;color:#e6f7ff;cursor:pointer">Buy Click Upgrade</button>
+            <div id="clickUpgradeCost" style="font-size:12px;opacity:.9"></div>
+          </div>
+        </div>
+
+        <div class="panel">
           <h3>Upgrade Hub</h3>
           <div id="upgradeHub" class="list"></div>
         </div>
