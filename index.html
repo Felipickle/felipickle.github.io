@@ -13,10 +13,12 @@
         height: 100vh;
         font-family: 'Press Start 2P', cursive;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: 20px;
 
-        /* Retro 80s gradient background */
+        /* Retro animated gradient */
         background: linear-gradient(135deg, #ff0080, #ff8c00, #ffe600, #00eaff, #4b00ff);
         background-size: 600% 600%;
         animation: bgMove 12s ease infinite;
@@ -28,14 +30,87 @@
         100% {background-position: 0% 50%;}
     }
 
-    h1 {
+    h1, h3, p {
         color: white;
-        font-size: 40px;
         text-shadow: 3px 3px 0px black;
+        margin: 0;
+        text-align: center;
+    }
+
+    .counter-box {
+        margin-top: 15px;
+        padding: 15px;
+        background: rgba(0,0,0,0.4);
+        border: 3px solid white;
+        border-radius: 10px;
+        text-align: center;
     }
 </style>
 </head>
 <body>
     <h1>MY WEBSITE</h1>
+    <h3>By yours truly</h3>
+
+    <div class="counter-box">
+        <p id="daily"></p>
+        <p id="weekly"></p>
+        <p id="alltime"></p>
+    </div>
+
+<script>
+// ---- Visit Counter Logic ----
+
+// Get today's date in YYYY-MM-DD
+function getToday() {
+    return new Date().toISOString().split("T")[0];
+}
+
+// Get week number for weekly tracking
+function getWeek() {
+    const date = new Date();
+    const firstDay = new Date(date.getFullYear(), 0, 1);
+    const dayCount = Math.floor((date - firstDay) / (24*60*60*1000));
+    return Math.ceil((dayCount + firstDay.getDay() + 1) / 7);
+}
+
+// Load or initialize localStorage values
+let allTime = Number(localStorage.getItem("visits_alltime") || 0);
+let daily = Number(localStorage.getItem("visits_daily") || 0);
+let weekly = Number(localStorage.getItem("visits_weekly") || 0);
+
+let lastDay = localStorage.getItem("last_day");
+let lastWeek = localStorage.getItem("last_week");
+
+let today = getToday();
+let thisWeek = getWeek();
+
+// Reset daily if new day
+if (lastDay !== today) {
+    daily = 0;
+    localStorage.setItem("last_day", today);
+}
+
+// Reset weekly if new week
+if (lastWeek != thisWeek) {
+    weekly = 0;
+    localStorage.setItem("last_week", thisWeek);
+}
+
+// Increase counts
+allTime++;
+daily++;
+weekly++;
+
+// Save updated totals
+localStorage.setItem("visits_alltime", allTime);
+localStorage.setItem("visits_daily", daily);
+localStorage.setItem("visits_weekly", weekly);
+
+// Display on screen
+document.getElementById("daily").textContent = "Daily Visits: " + daily;
+document.getElementById("weekly").textContent = "Weekly Visits: " + weekly;
+document.getElementById("alltime").textContent = "All-Time Visits: " + allTime;
+</script>
+
 </body>
 </html>
