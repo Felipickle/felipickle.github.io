@@ -1,210 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>GalaxyHub</title>
-<style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #101020;
-        color: white;
-        transition: background 1s;
-        text-align: center;
-    }
+    <title>Space Factory</title>
+    <style>
+        body {
+            background: #0a0f2c;
+            color: white;
+            font-family: monospace;
+            text-align: center;
+            padding: 20px;
+        }
 
-    #topbar {
-        background: #1c1c2b;
-        padding: 20px;
-        font-size: 30px;
-        font-weight: bold;
-        box-shadow: 0 4px 10px #000;
-    }
+        .panel {
+            margin: 20px auto;
+            padding: 20px;
+            width: 350px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
 
-    .button {
-        background: #3b3be0;
-        padding: 15px 25px;
-        border-radius: 8px;
-        border: none;
-        color: white;
-        cursor: pointer;
-        margin: 10px;
-        font-size: 18px;
-        transition: 0.2s;
-    }
-    .button:hover {
-        background: #6060ff;
-        transform: scale(1.05);
-    }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            background: #4e72ff;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 15px;
+        }
 
-    #content {
-        padding: 30px;
-    }
-
-    .resource-box {
-        background: #252542;
-        padding: 20px;
-        border-radius: 10px;
-        display: inline-block;
-        margin: 10px;
-        width: 200px;
-    }
-</style>
+        button:hover {
+            background: #6b89ff;
+        }
+    </style>
 </head>
 <body>
 
-<div id="topbar">🚀 GalaxyHub</div>
+    <h1>🚀 SPACE FACTORY</h1>
+    <p>Mine resources → build factories → expand your space empire.</p>
 
-<div id="content">
-    <h2>Welcome Commander!</h2>
-    <p>Select a destination:</p>
+    <div class="panel">
+        <h2>Resources</h2>
+        <p>Ore: <span id="ore">0</span></p>
+        <p>Metal: <span id="metal">0</span></p>
+        <p>Energy: <span id="energy">0</span></p>
 
-    <button class="button" onclick="goHub()">Return to Hub</button>
-    <button class="button" onclick="travel('terra')">🌍 Terra</button>
-    <button class="button" onclick="travel('ember')">🔥 Ember</button>
-</div>
+        <button onclick="mineOre()">Mine Ore +1</button>
+    </div>
 
+    <div class="panel">
+        <h2>Factories</h2>
+        <p>Ore Factories: <span id="oreFactories">0</span></p>
+        <p>Metal Factories: <span id="metalFactories">0</span></p>
 
-<script>
-// ---------------------
-// GAME STATE
-// ---------------------
-let resources = {
-    iron: 0,
-    crystal: 0,
-    emberDust: 0
-};
+        <button onclick="buyOreFactory()">Buy Ore Factory (Cost: 20 ore)</button>
+        <button onclick="buyMetalFactory()">Buy Metal Factory (Cost: 30 metal)</button>
+    </div>
 
-let upgrades = {
-    drill: 1
-};
+    <script>
+        let ore = 0;
+        let metal = 0;
+        let energy = 0;
 
-// Background colors for each planet
-const planetColors = {
-    hub: "#101020",
-    terra: "#203820",
-    ember: "#401010"
-};
+        let oreFactories = 0;
+        let metalFactories = 0;
 
+        function updateUI() {
+            document.getElementById("ore").innerText = ore;
+            document.getElementById("metal").innerText = metal;
+            document.getElementById("energy").innerText = energy;
+            document.getElementById("oreFactories").innerText = oreFactories;
+            document.getElementById("metalFactories").innerText = metalFactories;
+        }
 
-// ---------------------
-// SCREEN UPDATES
-// ---------------------
-function updateScreen(html) {
-    document.getElementById("content").innerHTML = html;
-}
+        function mineOre() {
+            ore++;
+            updateUI();
+        }
 
-// ---------------------
-// HUB SCREEN
-// ---------------------
-function goHub() {
-    document.body.style.background = planetColors.hub;
+        function buyOreFactory() {
+            if (ore >= 20) {
+                ore -= 20;
+                oreFactories++;
+                updateUI();
+            }
+        }
 
-    updateScreen(`
-        <h2>🛰 Your Hub Ship</h2>
+        function buyMetalFactory() {
+            if (metal >= 30) {
+                metal -= 30;
+                metalFactories++;
+                updateUI();
+            }
+        }
 
-        <div class="resource-box">
-            <h3>Resources</h3>
-            Iron: ${resources.iron}<br>
-            Crystal: ${resources.crystal}<br>
-            Ember Dust: ${resources.emberDust}
-        </div>
+        // Auto-production loop
+        setInterval(() => {
+            ore += oreFactories;       // Ore factories generate ore
+            metal += metalFactories;   // Metal factories generate metal
+            updateUI();
+        }, 1000); // 1 second
+    </script>
 
-        <h3>Upgrades</h3>
-        <button class="button" onclick="upgradeDrill()">
-            Upgrade Drill (Cost: 20 Iron) <br> Current: Lv ${upgrades.drill}
-        </button>
-        
-        <h3>Travel to Planets</h3>
-        <button class="button" onclick="travel('terra')">🌍 Terra</button>
-        <button class="button" onclick="travel('ember')">🔥 Ember</button>
-    `);
-}
-
-
-
-// ---------------------
-// DRILL UPGRADE
-// ---------------------
-function upgradeDrill() {
-    if (resources.iron >= 20) {
-        resources.iron -= 20;
-        upgrades.drill++;
-        goHub();
-    } else {
-        alert("Not enough iron!");
-    }
-}
-
-
-
-// ---------------------
-// PLANET SYSTEM
-// ---------------------
-function travel(planet) {
-    document.body.style.background = planetColors[planet];
-
-    if (planet === "terra") showTerra();
-    if (planet === "ember") showEmber();
-}
-
-
-
-// ---------------------
-// PLANETS
-// ---------------------
-
-// 🌍 Terra (Iron & Crystal)
-function showTerra() {
-    updateScreen(`
-        <h2>🌍 Terra</h2>
-        <p>Lush green world with basic minerals.</p>
-
-        <div class="resource-box">
-            Iron: ${resources.iron}<br>
-            Crystal: ${resources.crystal}
-        </div>
-
-        <button class="button" onclick="mineTerra()">Mine (Iron + Crystal)</button>
-        <br><br>
-        <button class="button" onclick="goHub()">Return to Hub</button>
-    `);
-}
-
-function mineTerra() {
-    resources.iron += 5 * upgrades.drill;
-    resources.crystal += 2 * upgrades.drill;
-    showTerra();
-}
-
-
-
-// 🔥 Ember (Ember Dust)
-function showEmber() {
-    updateScreen(`
-        <h2>🔥 Ember</h2>
-        <p>A volcanic world full of rare ember dust.</p>
-
-        <div class="resource-box">
-            Ember Dust: ${resources.emberDust}
-        </div>
-
-        <button class="button" onclick="mineEmber()">Collect Ember Dust</button>
-        <br><br>
-        <button class="button" onclick="goHub()">Return to Hub</button>
-    `);
-}
-
-function mineEmber() {
-    resources.emberDust += 3 * upgrades.drill;
-    showEmber();
-}
-
-
-
-// ---------------------
-goHub(); // start game
-// ---------------------
-</script>
 </body>
 </html>
