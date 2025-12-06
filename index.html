@@ -46,6 +46,9 @@ hr{border:0;border-top:1px dashed rgba(255,255,255,0.1);margin:8px 0}
 <hr>
 <h3>Achievements</h3>
 <div id="achievementsList"></div>
+<hr>
+<h3>Collected Pets</h3>
+<div id="petList"></div>
 </div>
 </div>
 
@@ -57,7 +60,7 @@ resources:{
   ore:0,metal:0,energy:0,crystal:0,alloy:0,circuit:0,fuelCell:0,shipPart:0,
   aiCore:0,nanofiber:0,quantumGel:0,darkMatter:0,hyperalloy:0,galaxyCoin:0,
   tools:{tier1:0,tier2:0,tier3:0,tier4:0,tier5:0},
-  pets:{normal:0,superRare:0}
+  pets:{normal:0,superRare:0,collected:[]}
 },
 factories:{
   oreFactory:0,energyGen:0,smelter:0,crystalExtractor:0,circuitFoundry:0,alloyForge:0,
@@ -103,7 +106,7 @@ cafeteria:{name:"Cafeteria",cost:{metal:400,energy:50},desc:"Crew morale +1000. 
 observatory:{name:"Observatory",cost:{metal:600,crystal:100},desc:"Scan stars to find rare items."},
 lab:{name:"Lab",cost:{metal:800,crystal:200,energy:300},desc:"Research advanced upgrades."},
 weaponAssembly:{name:"Weapon Assembly Line",cost:{metal:1000,energy:500,alloy:200},desc:"Produces Tier tools automatically."},
-petAssembly:{name:"Pet Assembly Line",cost:{metal:200,crystal:50,energy:100},desc:"Produces normal pets automatically."}
+petAssembly:{name:"Pet Assembly Line",cost:{metal:200,crystal:50,energy:100},desc:"Produces random pets automatically."}
 };
 
 // ======== ACHIEVEMENTS ========
@@ -118,34 +121,36 @@ function addResource(res,val){
 function canAfford(cost){for(const k in cost){if((state.resources[k]||0)<cost[k])return false;}return true;}
 function payCost(cost){for(const k in cost){state.resources[k]-=cost[k];}}
 function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+// ======== USERNAME & ADMIN ========
 function setUsername(){
     let input=document.getElementById('usernameInput').value.trim();
-    if(input){state.username=input;document.title=input+"'s Space Factory";document.getElementById('headerTitle').innerText=input+"'s Space Factory";}
+    if(input){
+        state.username=input;
+        document.title=input+"'s Space Factory";
+        document.getElementById('headerTitle').innerText=input+"'s Space Factory";
+
+        if(input.toLowerCase()==='felipicklejalapeno'){
+            alert("⚡ Admin Mode Activated! ⚡");
+            for(const r in state.resources){
+                if(typeof state.resources[r]==='object'){
+                    for(const sub in state.resources[r]) state.resources[r][sub]=999999;
+                } else state.resources[r]=999999;
+            }
+            for(const f in factories) state.factories[f]=10;
+            for(const u in upgradesData) upgradesData[u].effect();
+            renderResources(); renderFactories(); renderUpgrades(); renderStationRooms(); renderAchievements();
+        }
+    }
 }
 
 // ======== ACTIONS ========
 function manualMine(){addResource('ore',1+state.upgrades.oreBoost);}
 function manualEnergy(){addResource('energy',1+state.upgrades.energyBoost);}
 function asteroidMine(){addResource('ore',Math.floor(Math.random()*200)+50);addResource('metal',Math.floor(Math.random()*60)+10);}
-
-// Build factory
-function buildFactory(key){
-    let f=factories[key];if(!f)return;if(!canAfford(f.cost)){alert("Cannot afford "+f.name);return;}
-    payCost(f.cost);state.factories[key]=(state.factories[key]||0)+1;renderFactories();
-}
-
-// Build upgrade
-function buildUpgrade(key){
-    let u=upgradesData[key];if(!u)return;if(!canAfford(u.cost)){alert("Cannot afford "+u.name);return;}
-    payCost(u.cost);u.effect();renderUpgrades();renderResources();
-}
-
-// Build station room
-function buildRoom(key){
-    let room=stationRoomsData[key];if(!room)return;if(!canAfford(room.cost)){alert("Cannot afford "+room.name);return;}
-    payCost(room.cost);state.stationRooms[key]=(state.stationRooms[key]||0)+1;renderStationRooms();
-    if(key==='robloxExperienceRoom'){alert("🎉 Crew now screams 'Oof' every 3 minutes!");}
-}
+function buildFactory(key){let f=factories[key];if(!f)return;if(!canAfford(f.cost)){alert("Cannot afford "+f.name);return;}payCost(f.cost);state.factories[key]=(state.factories[key]||0)+1;renderFactories();}
+function buildUpgrade(key){let u=upgradesData[key];if(!u)return;if(!canAfford(u.cost)){alert("Cannot afford "+u.name);return;}payCost(u.cost);u.effect();renderUpgrades();renderResources();}
+function buildRoom(key){let room=stationRoomsData[key];if(!room)return;if(!canAfford(room.cost)){alert("Cannot afford "+room.name);return;}payCost(room.cost);state.stationRooms[key]=(state.stationRooms[key]||0)+1;renderStationRooms();if(key==='robloxExperienceRoom'){alert("🎉 Crew now screams 'Oof' every 3 minutes!");}}
 
 // ======== RENDER ========
 function renderResources(){
@@ -157,37 +162,20 @@ function renderResources(){
             for(const sub in val){cont.innerHTML+=`<div class="resource" style="padding-left:10px"><span>${capitalize(sub)}</span><span>${Math.floor(val[sub])}</span></div>`;}
         } else cont.innerHTML+=`<div class="resource"><span>${capitalize(r)}</span><span>${Math.floor(val)}</span></div>`;
     }
-}
-function renderFactories(){
-    let cont=document.getElementById('factoriesList');cont.innerHTML='';
-    for(const k in factories){let f=factories[k];let count=state.factories[k]||0;
-        cont.innerHTML+=`<div><strong>${f.name} x${count}</strong> - Cost: ${JSON.stringify(f.cost)}<br><button onclick="buildFactory('${k}')">Build ${f.name}</button></div>`;
+    // Render collected pets
+    let petCont=document.getElementById('petList');petCont.innerHTML='';
+    if(state.resources.pets.collected.length>0){
+        let last5=state.resources.pets.collected.slice(-5);
+        last5.forEach(p=>{petCont.innerHTML+=`<div>🐾 ${p}</div>`;});
     }
 }
-function renderUpgrades(){
-    let cont=document.getElementById('upgradesList');cont.innerHTML='';
-    for(const k in upgradesData){let u=upgradesData[k];
-        cont.innerHTML+=`<div><strong>${u.name}</strong> - Cost: ${JSON.stringify(u.cost)}<br><button onclick="buildUpgrade('${k}')">Purchase ${u.name}</button></div>`;
-    }
-}
-function renderStationRooms(){
-    let cont=document.getElementById('stationRooms');cont.innerHTML='';
-    for(const k in stationRoomsData){let room=stationRoomsData[k];let count=state.stationRooms[k]||0;
-        cont.innerHTML+=`<div><strong>${room.name}</strong> x${count} - Cost: ${JSON.stringify(room.cost)}<br><span class="muted">${room.desc}</span></div>`;
-    }
-}
-function renderStationButtons(){
-    let cont=document.getElementById('stationButtons');cont.innerHTML='';
-    for(const k in stationRoomsData){let room=stationRoomsData[k];
-        cont.innerHTML+=`<button onclick="buildRoom('${k}')">Build ${room.name}</button>`;
-    }
-}
-function renderAchievements(){
-    let cont=document.getElementById('achievementsList');cont.innerHTML='';
-    achievements.forEach(a=>{cont.innerHTML+=`<div>🏆 ${a}</div>`;});
-}
+function renderFactories(){let cont=document.getElementById('factoriesList');cont.innerHTML='';for(const k in factories){let f=factories[k];let count=state.factories[k]||0;cont.innerHTML+=`<div><strong>${f.name} x${count}</strong> - Cost: ${JSON.stringify(f.cost)}<br><button onclick="buildFactory('${k}')">Build ${f.name}</button></div>`;}}
+function renderUpgrades(){let cont=document.getElementById('upgradesList');cont.innerHTML='';for(const k in upgradesData){let u=upgradesData[k];cont.innerHTML+=`<div><strong>${u.name}</strong> - Cost: ${JSON.stringify(u.cost)}<br><button onclick="buildUpgrade('${k}')">Purchase ${u.name}</button></div>`;}}
+function renderStationRooms(){let cont=document.getElementById('stationRooms');cont.innerHTML='';for(const k in stationRoomsData){let room=stationRoomsData[k];let count=state.stationRooms[k]||0;cont.innerHTML+=`<div><strong>${room.name}</strong> x${count} - Cost: ${JSON.stringify(room.cost)}<br><span class="muted">${room.desc}</span></div>`;}}
+function renderStationButtons(){let cont=document.getElementById('stationButtons');cont.innerHTML='';for(const k in stationRoomsData){let room=stationRoomsData[k];cont.innerHTML+=`<button onclick="buildRoom('${k}')">Build ${room.name}</button>`;}}
+function renderAchievements(){let cont=document.getElementById('achievementsList');cont.innerHTML='';achievements.forEach(a=>{cont.innerHTML+=`<div>🏆 ${a}</div>`;});}
 
-// ======== AUTO PRODUCTION & ASSEMBLY LINES ========
+// ======== AUTO PRODUCTION ========
 function autoProduction(){
     // Factories produce
     for(const k in state.factories){let f=factories[k];if(!f)continue;let count=state.factories[k];if(count>0){
@@ -196,7 +184,7 @@ function autoProduction(){
         if(f.produce){for(const r in f.produce){addResource(r,f.produce[r]*count*prodMultiplier);}}
     }}
 
-    // Assembly lines
+    // Weapon Assembly Line
     let wLine=state.stationRooms.weaponAssembly||0;
     if(wLine>0){state.resources.tools.tier1 += wLine*1;
         if(state.factories.nanofiberLoom>=1) state.resources.tools.tier2 += 0.5*wLine;
@@ -204,8 +192,24 @@ function autoProduction(){
         if(state.factories.darkMatterHarvester>=1) state.resources.tools.tier4 += 0.1*wLine;
         if(state.factories.hyperalloyReactor>=1) state.resources.tools.tier5 += 0.05*wLine;
     }
+
+    // Pet Assembly Line
     let pLine=state.stationRooms.petAssembly||0;
-    if(pLine>0) state.resources.pets.normal += pLine*0.5;
+    if(pLine>0){
+        for(let i=0;i<pLine;i++){
+            let petsArr=['Energy Cat','Ore Dog','Metal Parrot','Crystal Bunny','Circuit Hamster'];
+            let chosen=petsArr[Math.floor(Math.random()*petsArr.length)];
+            state.resources.pets.normal += 1;
+            state.resources.pets.collected.push(chosen);
+            switch(chosen){
+                case 'Energy Cat': addResource('energy',1); break;
+                case 'Ore Dog': addResource('ore',1); break;
+                case 'Metal Parrot': addResource('metal',0.5); break;
+                case 'Crystal Bunny': addResource('crystal',0.3); break;
+                case 'Circuit Hamster': addResource('circuit',0.2); break;
+            }
+        }
+    }
 
     // Super Rare Pet Unlock
     if(state.factories.shipyard>=1 && state.resources.tools.tier5>=5 && state.resources.pets.superRare<1){
