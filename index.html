@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Space Factory + Station</title>
+<title>Space Factory</title>
 <style>
 body{margin:0;font-family:monospace;background:#071028;color:#eaf4ff}
 header{padding:12px;text-align:center;background:#0f1b3a}
@@ -19,8 +19,10 @@ hr{border:0;border-top:1px dashed rgba(255,255,255,0.1);margin:8px 0}
 </head>
 <body>
 <header>
-<h1>🌌 Space Factory + Station</h1>
-<div class="muted">Build factories, unlock space, upgrade production, and decorate your station!</div>
+<h1 id="headerTitle">🌌 Space Factory</h1>
+<div class="muted">Enter a username to begin:</div>
+<input type="text" id="usernameInput" placeholder="Your Name">
+<button onclick="setUsername()">Set Username</button>
 </header>
 <div id="wrapper">
 <div class="panel">
@@ -41,14 +43,27 @@ hr{border:0;border-top:1px dashed rgba(255,255,255,0.1);margin:8px 0}
 <h3>Space Station Rooms</h3>
 <div id="stationRooms"></div>
 <div id="stationButtons"></div>
+<hr>
+<h3>Achievements</h3>
+<div id="achievementsList"></div>
 </div>
 </div>
 
 <script>
 // ======== STATE ========
 let state={
-resources:{ore:0,metal:0,energy:0,crystal:0,alloy:0,circuit:0,fuelCell:0,shipPart:0,aiCore:0,nanofiber:0,quantumGel:0,darkMatter:0,hyperalloy:0},
-factories:{oreFactory:0,energyGen:0,smelter:0,crystalExtractor:0,circuitFoundry:0,alloyForge:0,fuelProcessor:0,nanofiberLoom:0,quantumSynth:0,darkMatterHarvester:0,hyperalloyReactor:0},
+username:"Player",
+resources:{
+  ore:0,metal:0,energy:0,crystal:0,alloy:0,circuit:0,fuelCell:0,shipPart:0,
+  aiCore:0,nanofiber:0,quantumGel:0,darkMatter:0,hyperalloy:0,galaxyCoin:0,
+  tools:{tier1:0,tier2:0,tier3:0,tier4:0,tier5:0},
+  pets:{normal:0,superRare:0}
+},
+factories:{
+  oreFactory:0,energyGen:0,smelter:0,crystalExtractor:0,circuitFoundry:0,alloyForge:0,
+  fuelProcessor:0,nanofiberLoom:0,quantumSynth:0,darkMatterHarvester:0,hyperalloyReactor:0,
+  shipyard:0,galaxyMine:0
+},
 stationRooms:{},
 upgrades:{oreBoost:0,energyBoost:0,factoryBoost:0}
 };
@@ -65,7 +80,9 @@ fuelProcessor:{name:"Fuel Processor",cost:{ore:100,energy:80},consume:{ore:3,ene
 nanofiberLoom:{name:"Nanofiber Loom",cost:{alloy:1000,circuit:500,crystal:200},consume:{alloy:5,circuit:2,crystal:1},produce:{nanofiber:1}},
 quantumSynth:{name:"Quantum Synthesizer",cost:{fuelCell:3000,metal:5000,crystal:2000},consume:{fuelCell:3,metal:5,crystal:1},produce:{quantumGel:1}},
 darkMatterHarvester:{name:"Dark Matter Harvester",cost:{energy:1000000,metal:200000,aiCore:50000},consume:{energy:2000},produce:{darkMatter:1}},
-hyperalloyReactor:{name:"Hyperalloy Reactor",cost:{nanofiber:2000,quantumGel:1000,alloy:2000},consume:{nanofiber:2,quantumGel:1,alloy:1},produce:{hyperalloy:1}}
+hyperalloyReactor:{name:"Hyperalloy Reactor",cost:{nanofiber:2000,quantumGel:1000,alloy:2000},consume:{nanofiber:2,quantumGel:1,alloy:1},produce:{hyperalloy:1}},
+shipyard:{name:"Shipyard",cost:{metal:5000,alloy:2000,energy:1000},consume:{metal:20,alloy:5,energy:50},produce:{shipPart:1}},
+galaxyMine:{name:"Galaxy Mine",cost:{darkMatter:10,energy:5000},consume:{energy:500},produce:{galaxyCoin:1}}
 };
 
 // ======== UPGRADES ========
@@ -75,20 +92,36 @@ energyBoost:{name:"Energy Boost +1",cost:{metal:50,energy:20},effect:()=>{state.
 factoryBoost:{name:"Factory Production Boost",cost:{metal:1000,alloy:200},effect:()=>{state.upgrades.factoryBoost+=0.1}}
 };
 
-// ======== STATION ROOMS ========
+// ======== SPACE STATION ROOMS ========
 const stationRoomsData={
-coffeeMachine:{name:"Coffee Machine Room",cost:{metal:50,energy:20},desc:"Increases morale by 2000%. Totally useless."},
+coffeeMachine:{name:"Coffee Machine Room",cost:{metal:50,energy:20},desc:"Crew morale +2000%. Totally useless."},
 gym:{name:"Gym",cost:{metal:200,energy:50,circuit:10},desc:"Crew can skip leg day. No effect."},
 retroArcade:{name:"Retro Arcade",cost:{metal:500,circuit:50},desc:"Adds Pac-Man noises."},
 hydroGarden:{name:"Hydroponic Garden",cost:{metal:300,crystal:10},desc:"Plants that won't eat anyone."},
-robloxExperienceRoom:{name:"ROBLOX EXPERIENCE™ ROOM",cost:{hyperalloy:5000000,darkMatter:1,circuit:200000,aiCore:99,coffeeMachine:1,gym:1},desc:"Your crew screams 'Oof' every 3 minutes."}
+robloxExperienceRoom:{name:"ROBLOX EXPERIENCE™ ROOM",cost:{hyperalloy:5000000,darkMatter:1,circuit:200000,aiCore:99,coffeeMachine:1,gym:1},desc:"Crew screams 'Oof' every 3 minutes."},
+cafeteria:{name:"Cafeteria",cost:{metal:400,energy:50},desc:"Crew morale +1000. Delicious!"},
+observatory:{name:"Observatory",cost:{metal:600,crystal:100},desc:"Scan stars to find rare items."},
+lab:{name:"Lab",cost:{metal:800,crystal:200,energy:300},desc:"Research advanced upgrades."},
+weaponAssembly:{name:"Weapon Assembly Line",cost:{metal:1000,energy:500,alloy:200},desc:"Produces Tier tools automatically."},
+petAssembly:{name:"Pet Assembly Line",cost:{metal:200,crystal:50,energy:100},desc:"Produces normal pets automatically."}
 };
 
+// ======== ACHIEVEMENTS ========
+let achievements=[];
+
 // ======== UTILS ========
-function addResource(res,val){state.resources[res]=(state.resources[res]||0)+val;renderResources();}
+function addResource(res,val){
+    if(typeof state.resources[res]==='object'){for(let k in val){state.resources[res][k]=(state.resources[res][k]||0)+val[k];}}
+    else state.resources[res]=(state.resources[res]||0)+val;
+    renderResources();
+}
 function canAfford(cost){for(const k in cost){if((state.resources[k]||0)<cost[k])return false;}return true;}
 function payCost(cost){for(const k in cost){state.resources[k]-=cost[k];}}
 function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+function setUsername(){
+    let input=document.getElementById('usernameInput').value.trim();
+    if(input){state.username=input;document.title=input+"'s Space Factory";document.getElementById('headerTitle').innerText=input+"'s Space Factory";}
+}
 
 // ======== ACTIONS ========
 function manualMine(){addResource('ore',1+state.upgrades.oreBoost);}
@@ -97,85 +130,98 @@ function asteroidMine(){addResource('ore',Math.floor(Math.random()*200)+50);addR
 
 // Build factory
 function buildFactory(key){
-let f=factories[key];if(!f)return;
-if(!canAfford(f.cost)){alert("Cannot afford "+f.name);return;}
-payCost(f.cost);
-state.factories[key]=(state.factories[key]||0)+1;
-renderFactories();
+    let f=factories[key];if(!f)return;if(!canAfford(f.cost)){alert("Cannot afford "+f.name);return;}
+    payCost(f.cost);state.factories[key]=(state.factories[key]||0)+1;renderFactories();
 }
 
 // Build upgrade
 function buildUpgrade(key){
-let u=upgradesData[key];if(!u)return;
-if(!canAfford(u.cost)){alert("Cannot afford "+u.name);return;}
-payCost(u.cost);u.effect();renderUpgrades();renderResources();
+    let u=upgradesData[key];if(!u)return;if(!canAfford(u.cost)){alert("Cannot afford "+u.name);return;}
+    payCost(u.cost);u.effect();renderUpgrades();renderResources();
 }
 
 // Build station room
 function buildRoom(key){
-let room=stationRoomsData[key];if(!room)return;
-if(!canAfford(room.cost)){alert("Cannot afford "+room.name);return;}
-payCost(room.cost);
-state.stationRooms[key]=(state.stationRooms[key]||0)+1;
-renderStationRooms();
-if(key==='robloxExperienceRoom'){alert("🎉 Crew now screams 'Oof' every 3 minutes!");console.log("ROBLOX EXPERIENCE activated!");}
+    let room=stationRoomsData[key];if(!room)return;if(!canAfford(room.cost)){alert("Cannot afford "+room.name);return;}
+    payCost(room.cost);state.stationRooms[key]=(state.stationRooms[key]||0)+1;renderStationRooms();
+    if(key==='robloxExperienceRoom'){alert("🎉 Crew now screams 'Oof' every 3 minutes!");}
 }
 
 // ======== RENDER ========
 function renderResources(){
-let cont=document.getElementById('resourcesList');cont.innerHTML='';
-for(const r in state.resources){
-cont.innerHTML+=`<div class="resource"><span>${capitalize(r)}</span><span>${Math.floor(state.resources[r])}</span></div>`;
-}}
-
+    let cont=document.getElementById('resourcesList');cont.innerHTML='';
+    for(const r in state.resources){
+        let val=state.resources[r];
+        if(typeof val==='object'){
+            cont.innerHTML+=`<div><strong>${capitalize(r)}</strong></div>`;
+            for(const sub in val){cont.innerHTML+=`<div class="resource" style="padding-left:10px"><span>${capitalize(sub)}</span><span>${Math.floor(val[sub])}</span></div>`;}
+        } else cont.innerHTML+=`<div class="resource"><span>${capitalize(r)}</span><span>${Math.floor(val)}</span></div>`;
+    }
+}
 function renderFactories(){
-let cont=document.getElementById('factoriesList');cont.innerHTML='';
-for(const k in factories){
-let f=factories[k];let count=state.factories[k]||0;
-cont.innerHTML+=`<div><strong>${f.name} x${count}</strong><br><button onclick="buildFactory('${k}')">Build ${f.name}</button></div>`;
-}}
-
+    let cont=document.getElementById('factoriesList');cont.innerHTML='';
+    for(const k in factories){let f=factories[k];let count=state.factories[k]||0;
+        cont.innerHTML+=`<div><strong>${f.name} x${count}</strong> - Cost: ${JSON.stringify(f.cost)}<br><button onclick="buildFactory('${k}')">Build ${f.name}</button></div>`;
+    }
+}
 function renderUpgrades(){
-let cont=document.getElementById('upgradesList');cont.innerHTML='';
-for(const k in upgradesData){
-let u=upgradesData[k];
-cont.innerHTML+=`<div><strong>${u.name}</strong><br><button onclick="buildUpgrade('${k}')">Purchase ${u.name}</button></div>`;
-}}
-
+    let cont=document.getElementById('upgradesList');cont.innerHTML='';
+    for(const k in upgradesData){let u=upgradesData[k];
+        cont.innerHTML+=`<div><strong>${u.name}</strong> - Cost: ${JSON.stringify(u.cost)}<br><button onclick="buildUpgrade('${k}')">Purchase ${u.name}</button></div>`;
+    }
+}
 function renderStationRooms(){
-let cont=document.getElementById('stationRooms');cont.innerHTML='';
-for(const k in stationRoomsData){
-let room=stationRoomsData[k];let count=state.stationRooms[k]||0;
-cont.innerHTML+=`<div><strong>${room.name}</strong> x${count}<br><span class="muted">${room.desc}</span></div>`;
+    let cont=document.getElementById('stationRooms');cont.innerHTML='';
+    for(const k in stationRoomsData){let room=stationRoomsData[k];let count=state.stationRooms[k]||0;
+        cont.innerHTML+=`<div><strong>${room.name}</strong> x${count} - Cost: ${JSON.stringify(room.cost)}<br><span class="muted">${room.desc}</span></div>`;
+    }
 }
-}
-
 function renderStationButtons(){
-let cont=document.getElementById('stationButtons');cont.innerHTML='';
-for(const k in stationRoomsData){
-let room=stationRoomsData[k];
-cont.innerHTML+=`<button onclick="buildRoom('${k}')">Build ${room.name}</button>`;
+    let cont=document.getElementById('stationButtons');cont.innerHTML='';
+    for(const k in stationRoomsData){let room=stationRoomsData[k];
+        cont.innerHTML+=`<button onclick="buildRoom('${k}')">Build ${room.name}</button>`;
+    }
 }
+function renderAchievements(){
+    let cont=document.getElementById('achievementsList');cont.innerHTML='';
+    achievements.forEach(a=>{cont.innerHTML+=`<div>🏆 ${a}</div>`;});
 }
 
-// ======== AUTO PRODUCTION ========
+// ======== AUTO PRODUCTION & ASSEMBLY LINES ========
 function autoProduction(){
-for(const k in state.factories){
-let f=factories[k];if(!f)continue;let count=state.factories[k];if(count>0){
-let prodMultiplier=1+state.upgrades.factoryBoost;
-if(f.consume){let can=true;for(const r in f.consume){if((state.resources[r]||0)<f.consume[r]*count){can=false;break;}}if(!can)continue;for(const r in f.consume){state.resources[r]-=f.consume[r]*count;}}
-if(f.produce){for(const r in f.produce){addResource(r,f.produce[r]*count*prodMultiplier);}}
-}}
-renderResources();
-setTimeout(autoProduction,1000);
+    // Factories produce
+    for(const k in state.factories){let f=factories[k];if(!f)continue;let count=state.factories[k];if(count>0){
+        let prodMultiplier=1+state.upgrades.factoryBoost;
+        if(f.consume){let can=true;for(const r in f.consume){if((state.resources[r]||0)<f.consume[r]*count){can=false;break;}}if(!can)continue;for(const r in f.consume){state.resources[r]-=f.consume[r]*count;}}
+        if(f.produce){for(const r in f.produce){addResource(r,f.produce[r]*count*prodMultiplier);}}
+    }}
+
+    // Assembly lines
+    let wLine=state.stationRooms.weaponAssembly||0;
+    if(wLine>0){state.resources.tools.tier1 += wLine*1;
+        if(state.factories.nanofiberLoom>=1) state.resources.tools.tier2 += 0.5*wLine;
+        if(state.factories.quantumSynth>=1) state.resources.tools.tier3 += 0.2*wLine;
+        if(state.factories.darkMatterHarvester>=1) state.resources.tools.tier4 += 0.1*wLine;
+        if(state.factories.hyperalloyReactor>=1) state.resources.tools.tier5 += 0.05*wLine;
+    }
+    let pLine=state.stationRooms.petAssembly||0;
+    if(pLine>0) state.resources.pets.normal += pLine*0.5;
+
+    // Super Rare Pet Unlock
+    if(state.factories.shipyard>=1 && state.resources.tools.tier5>=5 && state.resources.pets.superRare<1){
+        state.resources.pets.superRare=1;alert("🎉 You built your spaceship with Tier 5 tools! You unlocked a SUPER RARE PET!");
+    }
+
+    // Achievements
+    if(state.resources.galaxyCoin>=10 && !achievements.includes("First Galaxy Coins")){achievements.push("First Galaxy Coins");renderAchievements();alert("Achievement unlocked: First Galaxy Coins!");}
+    if(state.factories.hyperalloyReactor>=1 && !achievements.includes("Hyperalloy Master")){achievements.push("Hyperalloy Master");renderAchievements();alert("Achievement unlocked: Hyperalloy Master!");}
+
+    renderResources();
+    setTimeout(autoProduction,1000);
 }
 
 // ======== INIT ========
-renderResources();
-renderFactories();
-renderUpgrades();
-renderStationRooms();
-renderStationButtons();
+renderResources();renderFactories();renderUpgrades();renderStationRooms();renderStationButtons();renderAchievements();
 autoProduction();
 </script>
 </body>
